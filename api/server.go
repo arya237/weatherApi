@@ -17,6 +17,8 @@ func NewServer()*Server{
 
 func (s *Server) StartServer() error {
 
+	s.router.GET("/forecastnext15days/:location", forcastnext15days)
+
 	err := s.router.Run(s.listenAddress)
 
 	return err
