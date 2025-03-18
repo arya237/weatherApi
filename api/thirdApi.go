@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"weatherApi/data"
 )
 
 var key any
@@ -30,33 +31,32 @@ func init(){
 	}
 }
 
-func getForcastNext15Days(location string) (map[string]json.RawMessage, error) {
+func getForcastNext15Days(location string) (data.Result, error) {
 	
-	var income map[string]json.RawMessage
+	// var income map[string]json.RawMessage
+	var income data.Result
 
 	url := fmt.Sprintf("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/%s?key=%s", location, key)
-
-	fmt.Print("*****", url)
 
 	response, err := http.Get(url)
 
 	if err != nil{
 		log.Print(err.Error())
-		return nil, err
+		return data.Result{}, err
 	}
 
-	data, err := io.ReadAll(response.Body)
+	datas, err := io.ReadAll(response.Body)
 
 	if err != nil{
 		log.Print(err.Error())
-		return nil, err
+		return data.Result{} ,err
 	}
 
-	err = json.Unmarshal(data, &income)
+	err = json.Unmarshal(datas, &income)
 
 	if err != nil{
 		log.Print(err.Error())
-		return nil, err
+		return data.Result{}, err
 	}
 
 	return income, nil
